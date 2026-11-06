@@ -11,7 +11,7 @@ if not os.path.exists(out):
     open(out, 'wb').truncate(16 << 30)
 with open(out, 'r+b') as f:
     for i in range(start, N):
-        cmd = f'dd if=/dev/block/mmcblk0p32 bs=1048576 skip={i*C} count={C} 2>/dev/null'
+        cmd = f'dd if=/dev/block/mmcblk0p29 bs=1048576 skip={i*C} count={C} 2>/dev/null'
         for t in range(5):
             want = subprocess.run(A + ['shell', cmd + ' | sha1sum'], capture_output=True, text=True, timeout=300).stdout.split()[0]
             try:

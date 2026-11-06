@@ -4,12 +4,12 @@
 A="${ADB:-adb}${SERIAL:+ -s $SERIAL}"
 IMG=${1:?usage: flash-userdata.sh ROOT.img [OFFSET_MIB]}
 OFF=${2:-1}
-DEV=/dev/block/mmcblk0p32
-T=$(mktemp -t a40chunk).gz
+DEV=/dev/block/mmcblk0p29
+T=$(mktemp -t a40chunkXXXXXX).gz
 N=64; C=256
 for i in $(seq ${START:-0} $((N-1))); do
-  want=$(dd if=$IMG bs=1m skip=$((OFF + i*C)) count=$C 2>/dev/null | shasum | cut -d' ' -f1)
-  dd if=$IMG bs=1m skip=$((OFF + i*C)) count=$C 2>/dev/null | gzip -1 > $T
+  want=$(dd if=$IMG bs=1M skip=$((OFF + i*C)) count=$C 2>/dev/null | sha1sum | cut -d' ' -f1)
+  dd if=$IMG bs=1M skip=$((OFF + i*C)) count=$C 2>/dev/null | gzip -1 > $T
   for try in 1 2 3; do
     $A push $T /tmp/c.gz >/dev/null && \
     got=$($A shell "zcat /tmp/c.gz | dd of=$DEV bs=1048576 seek=$((i*C)) 2>/dev/null; dd if=$DEV bs=1048576 skip=$((i*C)) count=$C 2>/dev/null | sha1sum" | cut -d' ' -f1)

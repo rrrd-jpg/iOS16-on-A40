@@ -4,7 +4,7 @@ import subprocess, sys, os, hashlib
 A = [os.environ.get('ADB', 'adb')] + (['-s', os.environ['SERIAL']] if os.environ.get('SERIAL') else [])
 new = sys.argv[1]
 MB = 1 << 20; C = 256
-DEV = '/dev/block/mmcblk0p32'
+DEV = '/dev/block/mmcblk0p29'
 def sh(c): return subprocess.run(A + ['shell', c], capture_output=True, text=True).stdout
 tmp = os.path.join(os.environ.get('TMPDIR', '/tmp'), 'a40blk.bin')
 n = 0
